@@ -58,7 +58,7 @@ Fokus utama proyek ini adalah:
 * Tombol Beli
 * ~~Simulasi penambahan ke keranjang~~
 
----
+---.
 
 ## 👨‍🌾 Petani
 
