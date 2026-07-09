@@ -1,0 +1,1 @@
+const [nilai, fungsiPengubah] = useState(nilaiAwal)
