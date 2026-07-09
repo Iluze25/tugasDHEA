@@ -17,7 +17,7 @@ import FinanceVendor from "./pages/vendor/finance/FinanceVendor.jsx"
 import AnalVendor from "./pages/vendor/anal/analvendor.jsx"
 import InvestmentVendor from "./pages/vendor/investment/investmentvendor.jsx"
 import ReportVendor from "./pages/vendor/report/reportvendor.jsx"
-
+import HomeAgro from "./pages/home.jsx"
 
 // Investor
 import Investor from "./pages/investor/investor.jsx"
@@ -29,8 +29,11 @@ import Presentasi from "./pages/persentasi.jsx"
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Investor />} />
+      <Route path="/" element={<HomeAgro />} />
       {/* Vendor */}
+
+      <Route path="/Investor" element={<Investor />} />
+
       <Route path="/Dashboardvendor" element={<DashboardVendor />} />
       <Route path="/ProdukVendor" element={<ProductsVendor />} />
       <Route path="/PesananVendor" element={<OrderVendor />} />
