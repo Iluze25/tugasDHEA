@@ -68,8 +68,8 @@ export default function AgriTechLandingPage() {
                     </span>
                 </div>
                 <div className="hidden md:flex items-center gap-8 text-sm text-slate-400 font-medium">
-                    <a href="#" className="hover:text-emerald-400 transition-colors">Ekosistem</a>
-                    <a href="#" className="hover:text-emerald-400 transition-colors">Teknologi</a>
+                    <a href="#ekosistem" className="hover:text-emerald-400 transition-colors">Ekosistem</a>
+                    <a href="#teknologi" className="hover:text-emerald-400 transition-colors">Teknologi</a>
                     <a href="#" className="hover:text-emerald-400 transition-colors">Portofolio</a>
                     <a href="#" className="hover:text-emerald-400 transition-colors">Dampak Sosial</a>
                 </div>
@@ -151,9 +151,9 @@ export default function AgriTechLandingPage() {
                         custom={0.2}
                         className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] text-white"
                     >
-                        Sinergi Investasi Terpercaya & <br />
+                        Dari Lahan Lokal Menuju <br />
                         <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-400 bg-clip-text text-transparent">
-                            Agroteknologi Presisi
+                            Ekosistem Digital
                         </span>
                     </motion.h1>
 
@@ -165,7 +165,7 @@ export default function AgriTechLandingPage() {
                         custom={0.4}
                         className="text-base md:text-xl text-slate-400 max-w-2xl mx-auto font-light leading-relaxed"
                     >
-                        Menghubungkan investor global, petani modern, dan pasar terpercaya dalam satu ekosistem digital berbasis kecerdasan data.
+                        Menghubungkan petani lokal, pembeli, dan mitra pendukung melalui teknologi untuk menciptakan proses pertanian yang lebih mudah, transparan, dan berkembang
                     </motion.p>
 
                     {/* CTA Buttons */}
@@ -176,18 +176,18 @@ export default function AgriTechLandingPage() {
                         custom={0.6}
                         className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4"
                     >
-                        <button onClick={() => navigate("/Investor")} className="group w-full sm:w-auto relative px-8 py-4 rounded-xl font-bold text-sm overflow-hidden bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_40px_rgba(16,185,129,0.5)] transition-all">
+                        <button onClick={() => navigate("/logininvestor")} className="group w-full sm:w-auto relative px-8 py-4 rounded-xl font-bold text-sm overflow-hidden bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_40px_rgba(16,185,129,0.5)] transition-all">
                             <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-amber-400 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             <span className="relative flex items-center justify-center gap-2">
                                 Mulai Investasi <TrendingUp className="w-4 h-4" />
                             </span>
                         </button>
 
-                        <button onClick={() => navigate("/Dashboardvendor")} className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-sm bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-emerald-500/40 hover:bg-[#031513] transition-all flex items-center justify-center gap-2">
+                        <button onClick={() => navigate("/loginvendor")} className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-sm bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-emerald-500/40 hover:bg-[#031513] transition-all flex items-center justify-center gap-2">
                             Kelola Bisnis <Briefcase className="w-4 h-4 text-emerald-400" />
                         </button>
 
-                        <button onClick={() => navigate("/home")} className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-sm bg-transparent border border-emerald-500/20 hover:border-amber-500/40 text-slate-400 hover:text-amber-300 transition-all flex items-center justify-center gap-2">
+                        <button onClick={() => navigate("/loginmarketplace")} className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-sm bg-transparent border border-emerald-500/20 hover:border-amber-500/40 text-slate-400 hover:text-amber-300 transition-all flex items-center justify-center gap-2">
                             Jelajahi Marketplace <ShoppingBag className="w-4 h-4" />
                         </button>
                     </motion.div>
@@ -195,7 +195,7 @@ export default function AgriTechLandingPage() {
             </section>
 
             {/* 2. CONNECTION SECTION */}
-            <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
+            <section id='ekosistem' className="py-24 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
                 <div className="text-center space-y-4 mb-16">
                     <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">Arsitektur Ekosistem</h2>
                     <p className="text-3xl md:text-4xl font-bold text-white">Bagaimana Kami Menghubungkan Nilai</p>
@@ -238,7 +238,7 @@ export default function AgriTechLandingPage() {
                         <h3 className="text-xl font-bold text-white mb-2">Vendor / Petani</h3>
                         <p className="text-sm text-emerald-300 font-semibold mb-4">Produksi & Supply Chain</p>
                         <p className="text-slate-400 text-sm leading-relaxed">
-                            Memaksimalkan kapasitas lahan menggunakan instrumen IoT, mendokumentasikan rantai suplai, dan menjamin kesegaran komoditas dari awal penanaman.
+                            Membantu petani mengelola hasil pertanian dengan lebih baik melalui akses pasar, pencatatan digital, dan informasi yang lebih transparan.
                         </p>
                     </motion.div>
 
@@ -254,7 +254,7 @@ export default function AgriTechLandingPage() {
                         <h3 className="text-xl font-bold text-white mb-2">Marketplace</h3>
                         <p className="text-sm text-teal-300 font-semibold mb-4">Distribusi & Penjualan</p>
                         <p className="text-slate-400 text-sm leading-relaxed">
-                            Menghubungkan langsung hasil panen berstandar internasional ke tangan end-buyer komersial, menjamin harga wajar dengan integrasi pintar.
+                            Memudahkan pembeli mendapatkan produk pertanian segar langsung dari sumber terpercaya melalui platform digital.
                         </p>
                     </motion.div>
 
@@ -279,7 +279,7 @@ export default function AgriTechLandingPage() {
                         {/* Background pattern */}
                         <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
-                        <div className="space-y-6">
+                        <div id='teknologi' className="space-y-6">
                             <div className="flex justify-between items-start">
                                 <div className="p-4 rounded-2xl bg-gradient-to-tr from-amber-500/10 to-transparent border border-amber-500/20">
                                     <BarChart3 className="w-8 h-8 text-amber-400" />
@@ -296,7 +296,7 @@ export default function AgriTechLandingPage() {
                             </div>
                         </div>
 
-                        <button className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
+                        <button onClick={() => navigate("/logininvestor")} className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-950 font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
                             Masuk Platform <ChevronRight className="w-4 h-4" />
                         </button>
                     </motion.div>
@@ -315,7 +315,7 @@ export default function AgriTechLandingPage() {
                                     <Activity className="w-8 h-8 text-emerald-400" />
                                 </div>
                                 <span className="text-[10px] font-mono tracking-wider text-emerald-400 uppercase bg-emerald-950/40 px-3 py-1 rounded-full border border-emerald-500/30">
-                                    AgroIoT Node
+                                    Agro Management
                                 </span>
                             </div>
                             <div className="space-y-3">
@@ -326,7 +326,7 @@ export default function AgriTechLandingPage() {
                             </div>
                         </div>
 
-                        <button className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                        <button onClick={() => navigate("/logindvendor")} className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
                             Masuk Platform <ChevronRight className="w-4 h-4" />
                         </button>
                     </motion.div>
@@ -356,7 +356,7 @@ export default function AgriTechLandingPage() {
                             </div>
                         </div>
 
-                        <button className="w-full py-3.5 rounded-xl bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-white font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(20,184,166,0.2)]">
+                        <button onClick={() => navigate("/loginmarketplace")} className="w-full py-3.5 rounded-xl bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-white font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(20,184,166,0.2)]">
                             Masuk Platform <ChevronRight className="w-4 h-4" />
                         </button>
                     </motion.div>

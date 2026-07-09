@@ -395,7 +395,7 @@ export default function MarketplaceHome() {
             id: 1,
             name: 'Andi Wijaya',
             role: 'Pelanggan Rumah Tangga',
-            text: 'Belanja sayur dan buah di Agro Business menghemat waktu saya. Semuanya segar dan rasanya jauh lebih manis dibanding supermarket langganan saya sebelumnya.',
+            text: 'Belanja sayur dan buah di Agrovest menghemat waktu saya. Semuanya segar dan rasanya jauh lebih manis dibanding supermarket langganan saya sebelumnya.',
             image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
             rating: 5,
         },
@@ -411,7 +411,7 @@ export default function MarketplaceHome() {
             id: 3,
             name: 'Bambang Hartono',
             role: 'Ketua Kelompok Tani Mandiri',
-            text: 'Sejak bergabung dengan Agro Business, pendapatan anggota kelompok tani kami meningkat drastis. Kami tidak perlu khawatir lagi tentang tengkulak yang merusak harga.',
+            text: 'Sejak bergabung dengan Agrovest, pendapatan anggota kelompok tani kami meningkat drastis. Kami tidak perlu khawatir lagi tentang tengkulak yang merusak harga.',
             image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80',
             rating: 5,
         },
@@ -519,7 +519,7 @@ export default function MarketplaceHome() {
                             <div className="relative bg-white p-4 rounded-3xl shadow-2xl border border-gray-100 animate-float">
                                 <img
                                     src="https://i.pinimg.com/736x/d8/69/31/d86931895277419c12762c18ea14cf50.jpg"
-                                    alt="Pertanian Agro Business"
+                                    alt="Pertanian Agrovest"
                                     className="rounded-2xl object-cover w-full h-[300px] sm:h-[400px] shadow-inner"
                                 />
                                 <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl border border-gray-50 hidden sm:flex items-center space-x-3 max-w-[200px] hover:scale-105 transition-all duration-300">
@@ -1125,7 +1125,7 @@ export default function MarketplaceHome() {
 
                     <div className="pt-8 border-t border-gray-800 text-center flex flex-col sm:flex-row items-center justify-between gap-4">
                         <p className="text-xs text-gray-500">
-                            &copy; {new Date().getFullYear()} Agro Business Indonesia. Seluruh hak cipta dilindungi undang-undang.
+                            &copy; {new Date().getFullYear()} Agrovest Indonesia. Seluruh hak cipta dilindungi undang-undang.
                         </p>
                         <div className="flex space-x-4 text-xs">
                             <a href="#" className="hover:underline">Syarat Layanan</a>

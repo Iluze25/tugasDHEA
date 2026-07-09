@@ -30,7 +30,7 @@ export default function Navbar() {
                         <Menu />
                     </button>
                     <a onClick={() => navigate("/home")} className="flex items-center gap-2 shrink-0">
-                        <span className="w-9 h-9 rounded-xl bg-green-600 text-white flex items-center justify-center"><Leaf style={{ width: "20px", height: "20px" }} /></span> <span className=" font-bold text-lg">Agro Business</span>
+                        <span className="w-9 h-9 rounded-xl bg-green-600 text-white flex items-center justify-center"><Leaf style={{ width: "20px", height: "20px" }} /></span> <span className=" font-bold text-lg">agrovest</span>
                     </a>
                     {/* Search Bar */}
                     <div className="hidden md:flex flex-1 items-center bg-[#f1f6f1] rounded-full px-4 py-2 gap-2 max-w-md">

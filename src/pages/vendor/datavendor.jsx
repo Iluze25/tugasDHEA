@@ -10,7 +10,7 @@ export const products = [
         stock: 150,
         unit: "Kg",
         description: "Cabai merah keriting pilihan hasil budidaya organik bebas pestisida sintetis, memiliki warna cerah merona dan tingkat kepedasan optimal.",
-        image: "https://images.unsplash.com/photo-1588252399745-b7987b39a6ae?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/1200x/a5/3e/d0/a53ed0e88939ebb00a7e369296e914f7.jpg",
         status: "Aktif"
     },
     {
@@ -21,7 +21,7 @@ export const products = [
         stock: 80,
         unit: "Kg",
         description: "Tomat segar organik tinggi antioksidan dan likopen, dipanen harian dari kebun greenhouse ramah lingkungan.",
-        image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/736x/11/9c/ea/119cea4b403ddcfcba404b6e58ddff0d.jpg",
         status: "Aktif"
     },
     {
