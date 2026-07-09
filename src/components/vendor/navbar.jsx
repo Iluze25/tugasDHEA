@@ -168,12 +168,12 @@ export default function AgroFinanceNavigation() {
                             className={`flex items-center gap-2.5 p-1.5 pr-3 rounded-full border border-stone-200 hover:bg-stone-50 transition-all shadow-sm ${profileDropdownOpen ? 'ring-2 ring-emerald-500/20 border-emerald-500' : ''}`}
                         >
                             <img
-                                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256&auto=format&fit=crop"
+                                src="https://scontent.fcgk22-2.fna.fbcdn.net/v/t39.30808-1/488921436_1453267752705007_5864091378705276613_n.jpg?stp=c0.0.742.742a_dst-jpg_tt6&cstp=mx742x742&ctp=s200x200&_nc_cat=110&ccb=1-7&_nc_sid=1d2534&_nc_ohc=xkMjZJO6p1cQ7kNvwFmrgUt&_nc_oc=AdrDY-Cy6fPYnpKQdO2xW2OTAAU54TgNEjpXp9LNAL2yegQdSAqNuGz7qyKI5C95GH4&_nc_zt=24&_nc_ht=scontent.fcgk22-2.fna&_nc_gid=KyFS3jTge1GnFhiz9ULw3Q&_nc_ss=7c2a8&oh=00_AQBimC9J29fWGYKVXMkcbZ5IEIQUkItCUZnCGKW34uPxqg&oe=6A55594E"
                                 alt="Avatar"
                                 className="w-8 h-8 rounded-full object-cover shadow-inner"
                             />
                             <div className="text-left hidden xl:block">
-                                <p className="text-xs font-bold text-stone-800 leading-none">CV Tani Makmur</p>
+                                <p className="text-xs font-bold text-stone-800 leading-none">Dhea Salsa Winanda</p>
                                 <p className="text-[9px] text-stone-400 font-semibold mt-0.5">Vendor Utama</p>
                             </div>
                             <ChevronDown size={14} className={`text-stone-400 transition-transform duration-300 ${profileDropdownOpen ? 'rotate-180' : ''}`} />
@@ -183,7 +183,7 @@ export default function AgroFinanceNavigation() {
                         {profileDropdownOpen && (
                             <div className="absolute right-0 mt-3 w-56 bg-white border border-stone-200/80 rounded-2xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-3 duration-200">
                                 <div className="p-4 border-b border-stone-100 bg-stone-50/50">
-                                    <p className="font-bold text-xs text-stone-800">CV Tani Makmur</p>
+                                    <p className="font-bold text-xs text-stone-800">Dhea Salsa Winanda</p>
                                     <p className="text-[10px] text-stone-400 font-semibold mt-0.5">Sektor Hortikultura</p>
                                 </div>
                                 <div className="p-1.5">
@@ -310,12 +310,12 @@ export default function AgroFinanceNavigation() {
                     <div className="flex items-center justify-between p-2 rounded-2xl bg-[#12372A]/50 border border-emerald-900/40">
                         <div className="flex items-center gap-2.5">
                             <img
-                                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256&auto=format&fit=crop"
+                                src="https://scontent.fcgk22-2.fna.fbcdn.net/v/t39.30808-1/488921436_1453267752705007_5864091378705276613_n.jpg?stp=c0.0.742.742a_dst-jpg_tt6&cstp=mx742x742&ctp=s200x200&_nc_cat=110&ccb=1-7&_nc_sid=1d2534&_nc_ohc=xkMjZJO6p1cQ7kNvwFmrgUt&_nc_oc=AdrDY-Cy6fPYnpKQdO2xW2OTAAU54TgNEjpXp9LNAL2yegQdSAqNuGz7qyKI5C95GH4&_nc_zt=24&_nc_ht=scontent.fcgk22-2.fna&_nc_gid=KyFS3jTge1GnFhiz9ULw3Q&_nc_ss=7c2a8&oh=00_AQBimC9J29fWGYKVXMkcbZ5IEIQUkItCUZnCGKW34uPxqg&oe=6A55594E"
                                 alt="Avatar"
                                 className="w-10 h-10 rounded-xl object-cover border border-emerald-800"
                             />
                             <div className="text-left">
-                                <p className="text-xs font-bold text-white">CV Tani Makmur</p>
+                                <p className="text-xs font-bold text-white">Dhea Salsa Indonesa</p>
                                 <p className="text-[9px] text-emerald-400 font-semibold">Tani Hortikultura</p>
                             </div>
                         </div>

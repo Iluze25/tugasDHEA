@@ -1,445 +1,749 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
     Wallet,
     ShoppingCart,
+    Package,
+    Coins,
     Leaf,
-    HandCoins,
-    TrendingUp,
-    AlertCircle,
+    Sparkles,
     X,
+    Calendar,
+    TrendingUp,
+    Info,
+    AlertTriangle,
+    Layers,
     ArrowUpRight,
+    TrendingDown,
     Activity,
+    CheckCircle2,
+    Clock,
+    Truck,
+    XCircle,
     HelpCircle
-} from 'lucide-react';
+} from "lucide-react";
+import {
+    AreaChart,
+    Area,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer
+} from "recharts";
+
+// Data Integration
+import { products } from "../datavendor.jsx";
+import { orders } from "../datavendor.jsx";
+import { finance } from "../datavendor.jsx";
+import { funding } from "../datavendor.jsx";
+
 import Navbar1 from "../../../components/vendor/navbar.jsx"
-import Anal from "./analys.jsx"
-import Racent from "./racent.jsx"
 
-// ============================================================================
-// 1. KOMPONEN PENDUKUNG: SUMMARY CARD (KARTU STATISTIK DENGAN ANIMASI HITUNG)
-// ============================================================================
-function SummaryCard({
-    title,
-    rawValue,
-    valuePrefix = '',
-    valueSuffix = '',
-    desc,
-    trendText,
-    trendType = 'positive',
-    icon: IconComponent,
-    theme,
-    onClick
-}) {
-    const [displayValue, setDisplayValue] = useState(0);
+export default function AgrobusinessDashboard() {
+    const [loading, setLoading] = useState(true);
+    const [activeModal, setActiveModal] = useState(null);
 
-    // Animasi hitung angka (Count-up) saat komponen pertama kali dimuat
+    // Simulasi loading state premium untuk visualisasi transisi yang mulus
     useEffect(() => {
-        let start = 0;
-        const end = rawValue;
-        if (start === end) return;
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+        return () => clearTimeout(timer);
+    }, []);
 
-        const duration = 1000; // Durasi total animasi (1 detik)
-        const stepTime = 16;   // Mengincar ~60 FPS
-        const steps = duration / stepTime;
-        const increment = (end - start) / steps;
+    // Memastikan data aman saat diakses
+    const safeProducts = Array.isArray(products) ? products : [];
+    const safeOrders = Array.isArray(orders) ? orders : [];
+    const safeRevenueData = finance && Array.isArray(finance.revenueData) ? finance.revenueData : [];
+    const safeFunding = Array.isArray(funding) ? funding : (funding ? [funding] : []);
 
-        const timer = setInterval(() => {
-            start += increment;
-            if (start >= end) {
-                clearInterval(timer);
-                setDisplayValue(end);
-            } else {
-                setDisplayValue(Math.floor(start));
+    // ----------------------------------------------------
+    // PERHITUNGAN DATA UTAMA
+    // ----------------------------------------------------
+
+    // Card 1: Total Pendapatan (Sum of all monthly revenue)
+    const totalRevenue = safeRevenueData.reduce((acc, curr) => acc + (Number(curr.revenue) || 0), 0);
+
+    // Card 2: Total Penjualan (Total completed sales transaction quantity)
+    const completedOrders = safeOrders.filter(
+        (order) =>
+            order.status?.toLowerCase() === "completed" ||
+            order.status?.toLowerCase() === "selesai" ||
+            order.status?.toLowerCase() === "success"
+    );
+
+    // Jika tidak ada status 'completed' yang terdeteksi, gunakan semua order untuk keandalan kalkulasi data
+    const targetOrdersForQty = completedOrders.length > 0 ? completedOrders : safeOrders;
+    const totalSalesQuantity = targetOrdersForQty.reduce(
+        (sum, order) => sum + (Number(order.quantity) || 0),
+        0
+    );
+
+    // Card 3: Total Produk
+    const totalProductsCount = safeProducts.length;
+
+    // Card 4: Total Modal Diterima (Sum of fundCollected)
+    const totalFundingReceived = safeFunding.reduce(
+        (acc, curr) => acc + (Number(curr.fundCollected) || 0),
+        0
+    );
+
+    // Format Rupiah Helper
+    const formatIDR = (value) => {
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(value);
+    };
+
+    // ----------------------------------------------------
+    // ANALISIS DATA DETIL (DITAMPILKAN PADA MODAL)
+    // ----------------------------------------------------
+
+    // Analisis Produk Terlaris
+    const getBestSellingProduct = () => {
+        const salesMap = {};
+        safeOrders.forEach((order) => {
+            const pId = order.productId;
+            const qty = Number(order.quantity) || 0;
+            salesMap[pId] = (salesMap[pId] || 0) + qty;
+        });
+
+        let bestProductId = null;
+        let maxQty = 0;
+        Object.entries(salesMap).forEach(([id, qty]) => {
+            if (qty > maxQty) {
+                maxQty = qty;
+                bestProductId = id;
             }
-        }, stepTime);
+        });
 
-        return () => clearInterval(timer);
-    }, [rawValue]);
-
-    // Format rupiah atau angka murni dengan pemisah ribuan
-    const formatNumber = (num) => {
-        return new Intl.NumberFormat('id-ID').format(num);
+        const productInfo = safeProducts.find((p) => String(p.id) === String(bestProductId));
+        return {
+            product: productInfo || { name: "Tidak teridentifikasi" },
+            quantity: maxQty
+        };
     };
 
-    // Konfigurasi kelas warna berdasarkan tema yang dipilih
-    const themeClasses = {
-        emerald: {
-            cardHover: 'hover:border-emerald-200 hover:shadow-emerald-100/50',
-            iconBg: 'bg-emerald-50 text-emerald-600 border border-emerald-100',
-            trendBg: 'bg-emerald-50 text-emerald-700 border border-emerald-100/50',
-            badge: 'bg-emerald-500',
-        },
-        teal: {
-            cardHover: 'hover:border-teal-200 hover:shadow-teal-100/50',
-            iconBg: 'bg-teal-50 text-teal-600 border border-teal-100',
-            trendBg: 'bg-teal-50 text-teal-700 border border-teal-100/50',
-            badge: 'bg-teal-500',
-        },
-        earth: {
-            cardHover: 'hover:border-amber-200 hover:shadow-amber-100/30',
-            iconBg: 'bg-amber-900/5 text-amber-800 border border-amber-900/10',
-            trendBg: 'bg-amber-50 text-amber-950 border border-amber-900/10',
-            badge: 'bg-amber-750',
-        },
-        gold: {
-            cardHover: 'hover:border-amber-300 hover:shadow-amber-100/60',
-            iconBg: 'bg-amber-50 text-amber-600 border border-amber-100',
-            trendBg: 'bg-amber-50 text-amber-700 border border-amber-100/50',
-            badge: 'bg-amber-500',
-        }
+    const bestSelling = getBestSellingProduct();
+
+    // Analisis Kategori Produk
+    const getProductCategories = () => {
+        const categories = {};
+        safeProducts.forEach((p) => {
+            const cat = p.category || "Lainnya";
+            categories[cat] = (categories[cat] || 0) + 1;
+        });
+        return Object.entries(categories).map(([name, count]) => ({ name, count }));
     };
 
-    const activeTheme = themeClasses[theme] || themeClasses.emerald;
+    const categoriesDistribution = getProductCategories();
 
-    return (
-        <div
-            onClick={onClick}
-            className={`group bg-white/95 backdrop-blur-sm rounded-2xl p-6 border border-stone-200/60 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer relative overflow-hidden flex flex-col justify-between min-h-[175px] ${activeTheme.cardHover}`}
-        >
-            {/* Ornamen latar belakang halus untuk aksen profesional */}
-            <div className={`absolute -right-4 -top-4 w-20 h-20 rounded-full opacity-10 pointer-events-none transition-transform duration-500 group-hover:scale-125 ${activeTheme.badge}`} />
-
-            <div>
-                <div className="flex justify-between items-start mb-4">
-                    <span className="text-[11px] font-bold tracking-wider text-stone-400 uppercase">
-                        {title}
-                    </span>
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 ${activeTheme.iconBg}`}>
-                        {IconComponent ? <IconComponent size={20} className="stroke-[2.2]" /> : <HelpCircle size={20} />}
-                    </div>
-                </div>
-
-                <h3 className="text-2xl font-extrabold text-stone-900 tracking-tight mb-1">
-                    {valuePrefix}{formatNumber(displayValue)}{valueSuffix}
-                </h3>
-            </div>
-
-            <div className="mt-2 space-y-2">
-                <p className="text-xs text-stone-500 leading-relaxed font-medium">
-                    {desc}
-                </p>
-
-                {trendText && (
-                    <div className="flex items-center">
-                        <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${activeTheme.trendBg}`}>
-                            {trendType === 'positive' ? (
-                                <TrendingUp size={10} className="stroke-[2.5]" />
-                            ) : (
-                                <AlertCircle size={10} className="stroke-[2.5]" />
-                            )}
-                            {trendText}
-                        </span>
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-}
-
-// ============================================================================
-// 2. KOMPONEN PENDUKUNG: DETAIL MODAL (RESPONSIF DESKTOP & MOBILE BOTTOM-SHEET)
-// ============================================================================
-function DetailModal({ isOpen, onClose, data }) {
-    const [shouldRender, setShouldRender] = useState(false);
-    const [animationClass, setAnimationClass] = useState('opacity-0 translate-y-8 sm:translate-y-4 sm:scale-95');
-
-    useEffect(() => {
-        if (isOpen) {
-            setShouldRender(true);
-            const timer = setTimeout(() => {
-                setAnimationClass('opacity-100 translate-y-0 sm:scale-100');
-            }, 10);
-            return () => clearTimeout(timer);
+    // Status Badge Helper
+    const getStatusBadge = (status) => {
+        const s = status?.toLowerCase() || "";
+        if (s === "completed" || s === "selesai") {
+            return (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Selesai
+                </span>
+            );
+        } else if (s === "processing" || s === "diproses" || s === "process") {
+            return (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    Diproses
+                </span>
+            );
+        } else if (s === "shipping" || s === "dikirim") {
+            return (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                    Dikirim
+                </span>
+            );
+        } else if (s === "pending" || s === "menunggu") {
+            return (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                    Menunggu
+                </span>
+            );
         } else {
-            setAnimationClass('opacity-0 translate-y-8 sm:translate-y-4 sm:scale-95');
-            const timer = setTimeout(() => {
-                setShouldRender(false);
-            }, 200);
-            return () => clearTimeout(timer);
+            return (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-rose-100 text-rose-800 border border-rose-200">
+                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                    Batal
+                </span>
+            );
         }
-    }, [isOpen]);
+    };
 
-    if (!shouldRender || !data) return null;
+    // Custom Chart Tooltip
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className="bg-white/95 backdrop-blur-md p-4 border border-emerald-100 rounded-xl shadow-lg">
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">{label}</p>
+                    <p className="text-lg font-bold text-emerald-700">
+                        {formatIDR(payload[0].value)}
+                    </p>
+                </div>
+            );
+        }
+        return null;
+    };
 
-    return (
-        <div className="fixed inset-0  flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-hidden">
-            {/* Latar Belakang Transparan Blur (Backdrop) */}
-            <div
-                className="absolute inset-0 bg-stone-950/50 backdrop-blur-sm transition-opacity duration-300"
-                onClick={onClose}
-            />
+    // ----------------------------------------------------
+    // SKELETON LOADING TEMPLATE
+    // ----------------------------------------------------
+    if (loading) {
+        return (
+            <div className="bg-gradient-to-tr from-slate-50 via-emerald-50/10 to-green-50/20 min-h-screen py-8 px-4 sm:px-6 lg:px-8 space-y-8 animate-pulse">
+                {/* Hero Skeleton */}
+                <div className="h-60 bg-slate-200 rounded-3xl w-full" />
 
-            {/* Konten Kotak Modal / Bottom Sheet */}
-            <div
-                className={`relative bg-white w-full sm:max-w-lg rounded-t-[2.5rem] sm:rounded-3xl shadow-2xl border border-stone-200/80 z-50 transform transition-all duration-300 ease-out max-h-[92vh] sm:max-h-[85vh] flex flex-col ${animationClass}`}
-            >
-                {/* Indikator Tarik khusus perangkat mobile */}
-                <div className="w-12 h-1.5 bg-stone-300/80 rounded-full mx-auto my-3 flex-shrink-0 sm:hidden" />
-
-                {/* Tombol Tutup pojok kanan atas */}
-                <button
-                    onClick={onClose}
-                    className="absolute right-5 top-5 sm:right-6 sm:top-6 p-2 rounded-xl text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors z-20"
-                >
-                    <X size={18} />
-                </button>
-
-                {/* Bagian Scrollable Konten Modal */}
-                <div className="overflow-y-auto px-6 pb-8 pt-2 sm:pt-8 sm:px-8 space-y-6 flex-1">
-                    {/* Header Modal */}
-                    <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-800 flex items-center justify-center flex-shrink-0">
-                            <Activity size={24} className="stroke-[2]" />
-                        </div>
-                        <div className="pr-8">
-                            <h4 className="text-[10px] uppercase font-extrabold text-stone-400 tracking-wider">Rincian Informasi</h4>
-                            <h3 className="text-lg sm:text-xl font-bold text-stone-900 leading-tight">{data.title}</h3>
-                        </div>
-                    </div>
-
-                    {/* Ringkasan Angka Utama */}
-                    <div className="bg-gradient-to-br from-stone-50 to-emerald-50/20 rounded-2xl p-4 border border-stone-100 flex justify-between items-center gap-2">
-                        <div>
-                            <p className="text-xs text-stone-500 font-medium">{data.primaryMetricLabel}</p>
-                            <p className="text-xl sm:text-2xl font-black text-stone-900 mt-1">{data.primaryMetricValue}</p>
-                        </div>
-                        {data.growth && (
-                            <span className="flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100/50 border border-emerald-200 px-3 py-1 rounded-full flex-shrink-0">
-                                <ArrowUpRight size={14} className="stroke-[2.5]" />
-                                {data.growth}
-                            </span>
-                        )}
-                    </div>
-
-                    {/* Metrik Grid Finansial */}
-                    <div className="space-y-4">
-                        <h5 className="text-[11px] font-bold uppercase tracking-wider text-stone-400">Metrik Finansial & Operasional</h5>
-
-                        <div className="grid grid-cols-2 gap-3.5">
-                            {data.metrics.map((metric, idx) => (
-                                <div key={idx} className="bg-stone-50/50 rounded-xl p-3.5 border border-stone-200/40 hover:bg-stone-50 transition-colors">
-                                    <span className="text-[11px] text-stone-500 font-medium block leading-tight">{metric.label}</span>
-                                    <span className="text-sm sm:text-base font-bold text-stone-900 mt-1 block leading-tight">{metric.value}</span>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* List Kategori Tambahan / Sumber Pendapatan */}
-                        {data.detailsList && (
-                            <div className="mt-6 border-t border-stone-100 pt-5">
-                                <h5 className="text-[11px] font-bold uppercase tracking-wider text-stone-400 mb-3">
-                                    {data.detailsListTitle}
-                                </h5>
-                                <div className="space-y-2">
-                                    {data.detailsList.map((item, idx) => (
-                                        <div key={idx} className="flex items-center justify-between p-3 bg-stone-50 rounded-xl border border-stone-200/20 gap-4">
-                                            <span className="text-xs font-semibold text-stone-700 truncate">{item.name}</span>
-                                            <span className="text-xs font-bold text-stone-900 flex-shrink-0">{item.value || 'Aktif'}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                {/* Summary Cards Skeleton */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="h-32 bg-slate-200 rounded-2xl w-full" />
+                    ))}
                 </div>
 
-                {/* Tombol Aksi Bawah */}
-                <div className="p-5 sm:p-6 border-t border-stone-100 bg-stone-50/80 rounded-b-3xl flex gap-3 flex-shrink-0">
-                    <button
-                        onClick={onClose}
-                        className="flex-1 py-3 bg-white border border-stone-200 hover:bg-stone-50 text-stone-700 font-bold text-xs rounded-xl transition-all"
-                    >
-                        Tutup Jendela
-                    </button>
-                    <button className="flex-1 py-3 bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs rounded-xl transition-all shadow-md">
-                        Unduh Laporan PDF
-                    </button>
+                {/* Chart and Side Widget Skeleton */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div className="h-96 bg-slate-200 rounded-2xl lg:col-span-2" />
+                    <div className="h-96 bg-slate-200 rounded-2xl" />
                 </div>
+
+                {/* Table Skeleton */}
+                <div className="h-80 bg-slate-200 rounded-2xl w-full" />
             </div>
-        </div>
-    );
-}
-
-// ============================================================================
-// 3. KOMPONEN UTAMA: VENDOR DASHBOARD (EXPORT UTAMA)
-// ============================================================================
-export default function VendorDashboard() {
-    const [selectedCard, setSelectedCard] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // Struktur Data Lengkap untuk Modal Detail Interaktif
-    const cardDetailPayloads = {
-        revenue: {
-            title: 'Detail Pendapatan Agribisnis',
-            primaryMetricLabel: 'Pendapatan Bulan Ini',
-            primaryMetricValue: 'Rp12.200.000',
-            growth: '+12.3%',
-            metrics: [
-                { label: 'Pendapatan Bulan Lalu', value: 'Rp10.500.000' },
-                { label: 'Rata-rata Harian', value: 'Rp400.000' }
-            ],
-            detailsListTitle: 'Sumber Pendapatan Komoditas',
-            detailsList: [
-                { name: 'Penjualan Cabai Rawit Organik', value: 'Rp5.000.000' },
-                { name: 'Penjualan Tomat Beef Premium', value: 'Rp4.000.000' },
-                { name: 'Penjualan Sayuran Hijau Organik', value: 'Rp3.000.000' }
-            ]
-        },
-        sales: {
-            title: 'Detail Penjualan & Transaksi',
-            primaryMetricLabel: 'Total Transaksi Sukses',
-            primaryMetricValue: '50 Pesanan',
-            growth: '+8.2%',
-            metrics: [
-                { label: 'Pesanan Selesai', value: '220 Unit' },
-                { label: 'Sedang Diproses', value: '25 Unit' }
-            ],
-            detailsListTitle: 'Informasi Produk Terlaris',
-            detailsList: [
-                { name: 'Cabai Rawit Organik (Terlaris)', value: '110 Pesanan' },
-                { name: 'Alpukat Mentega Super', value: '85 Pesanan' },
-                { name: 'Tomat Hidroponik Premium', value: '50 Pesanan' }
-            ]
-        },
-        products: {
-            title: 'Detail Status Inventaris Produk',
-            primaryMetricLabel: 'Katalog Produk Aktif',
-            primaryMetricValue: '120 Produk',
-            growth: null,
-            metrics: [
-                { label: 'Perlu Stok Tambahan', value: '15 Produk' },
-                { label: 'Stok Sangat Aman', value: '105 Produk' }
-            ],
-            detailsListTitle: 'Kategori Produk Terbanyak',
-            detailsList: [
-                { name: 'Kategori Sayuran Segar', value: '65 Varian' },
-                { name: 'Kategori Buah Hortikultura', value: '35 Varian' },
-                { name: 'Kategori Benih Unggulan', value: '20 Varian' }
-            ]
-        },
-        investment: {
-            title: 'Detail Pendanaan & Investasi',
-            primaryMetricLabel: 'Total Dana Investasi',
-            primaryMetricValue: 'Rp12.307.692',
-            growth: '65% Terpenuhi',
-            metrics: [
-                { label: 'Jumlah Investor Aktif', value: '12 Orang' },
-                { label: 'Proyek Lahan Berjalan', value: '3 Lokasi' }
-            ],
-            detailsListTitle: 'Status Alokasi Lahan Kemitraan',
-            detailsList: [
-                { name: 'Lahan Cabai Kebon Rejo', value: 'Berjalan (80%)' },
-                { name: 'Greenhouse Tomat Selo', value: 'Berjalan (55%)' },
-                { name: 'Lahan Sayur Baturaden', value: 'Tahap Persiapan' }
-            ]
-        }
-    };
-
-    const handleCardClick = (key) => {
-        setSelectedCard(cardDetailPayloads[key]);
-        setIsModalOpen(true);
-    };
+        );
+    }
 
     return (
         <>
             <Navbar1 />
+            <div className="bg-gradient-to-tr from-slate-100 via-emerald-50/20 to-green-50/30 min-h-screen py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden font-sans">
+                {/* CSS Floating & Glow effects style injection */}
+                <style>{`
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-10px) rotate(3deg); }
+        }
+        @keyframes float-delayed {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(12px) rotate(-3deg); }
+        }
+        .animate-float-slow {
+          animation: float-slow 7s ease-in-out infinite;
+        }
+        .animate-float-delayed {
+          animation: float-delayed 9s ease-in-out infinite;
+        }
+      `}</style>
 
-            <div className="relative min-h-screen bg-gradient-to-br from-stone-50 via-emerald-50/10 to-amber-50/10 p-4 md:p-8 overflow-hidden">
+                {/* Ambient Blurred Backgrounds */}
+                <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-200/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-1/4 right-0 w-[600px] h-[600px] bg-green-200/15 rounded-full blur-3xl pointer-events-none" />
 
-                {/* ----------------- LATAR BELAKANG PREMIUM (AMBIENT MESH GRID) ----------------- */}
+                <div className="max-w-7xl mx-auto space-y-8 relative z-10">
 
-                {/* 1. Pola Grid Titik Agrotech (Emerald Dot Grid) */}
-                <div className="absolute inset-0 bg-[radial-gradient(#10b981_0.75px,transparent_0.75px)] [background-size:24px_24px] opacity-[0.06] pointer-events-none" />
+                    {/* ====================================================
+            HERO SECTION
+            ==================================================== */}
+                    <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-800 via-emerald-700 to-teal-900 text-white p-8 md:p-12 shadow-xl border border-emerald-900/10 hover:shadow-2xl transition-all duration-500">
+                        {/* Decorative Floating Elements */}
+                        <div className="absolute top-6 right-12 text-emerald-400/20 animate-float-slow pointer-events-none">
+                            <Leaf size={140} />
+                        </div>
+                        <div className="absolute bottom-4 right-1/3 text-teal-400/10 animate-float-delayed pointer-events-none">
+                            <Coins size={90} />
+                        </div>
 
-                {/* 2. Blob Ambiens Kiri Atas (Emerald Soft Circle) */}
-                <div className="absolute -top-[15%] -left-[10%] w-[60%] h-[60%] rounded-full bg-emerald-200/20 blur-[130px] pointer-events-none" />
-
-                {/* 3. Blob Ambiens Kanan Bawah (Wheat/Gold Soft Circle) */}
-                <div className="absolute -bottom-[15%] -right-[10%] w-[60%] h-[60%] rounded-full bg-amber-100/35 blur-[130px] pointer-events-none" />
-
-                {/* ---------------------------------------------------------------------------- */}
-
-                <div className=" relative max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-top-4 duration-500 z-10">
-
-                    {/* Laman Header Utama */}
-                    <div className="flex items-start gap-4">
-                        {/* Pilar Aksen Warna di Samping Judul */}
-                        <div className="w-1.5 h-12 md:h-16 bg-gradient-to-b from-emerald-500 to-teal-600 rounded-full flex-shrink-0" />
-
-                        <div>
-                            <h2 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-stone-950 via-emerald-950 to-stone-900 bg-clip-text text-transparent tracking-tight leading-none">
-                                Ikhtisar Kinerja Bisnis
-                            </h2>
-                            <p className="text-xs md:text-sm text-stone-500 mt-2 font-medium max-w-xl leading-relaxed">
-                                Klik pada setiap kartu untuk meninjau rincian keuangan dan operasional agribisnis Anda secara interaktif.
+                        <div className="relative z-10 max-w-2xl">
+                            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/40 border border-emerald-600/30 text-emerald-300 text-xs font-semibold tracking-wider uppercase mb-6 animate-pulse">
+                                <Sparkles size={14} className="text-emerald-400" />
+                                Sistem Akuntansi Terpadu
+                            </div>
+                            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight">
+                                Dashboard Bisnis
+                            </h1>
+                            <p className="mt-4 text-base md:text-lg text-emerald-150/90 leading-relaxed font-light">
+                                Pantau performa usaha pertanian, pendapatan, transaksi, dan perkembangan bisnis dalam satu halaman.
                             </p>
                         </div>
                     </div>
 
-                    {/* Grid Kartu Utama */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {/* ====================================================
+            SUMMARY CARDS
+            ==================================================== */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                        <SummaryCard
-                            title="Total Pendapatan"
-                            rawValue={12200000}
-                            valuePrefix="Rp"
-                            desc="Pendapatan bersih dari transaksi penjualan langsung"
-                            trendText="+12.3% dibanding bulan lalu"
-                            trendType="positive"
-                            icon={Wallet}
-                            theme="emerald"
-                            onClick={() => handleCardClick('revenue')}
-                        />
+                        {/* Card 1: Total Pendapatan */}
+                        <div
+                            onClick={() => setActiveModal("revenue")}
+                            className="group bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:border-emerald-200 hover:shadow-md transition-all duration-300 cursor-pointer relative overflow-hidden"
+                        >
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-full transition-all group-hover:bg-emerald-500/10" />
+                            <div className="flex justify-between items-start">
+                                <div className="space-y-3">
+                                    <span className="text-sm font-semibold text-slate-500">Total Pendapatan</span>
+                                    <h3 className="text-2xl font-bold text-slate-800 tracking-tight group-hover:text-emerald-700 transition-colors">
+                                        {formatIDR(totalRevenue)}
+                                    </h3>
+                                    <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-600 bg-emerald-55/60 px-2 py-0.5 rounded-full">
+                                        <TrendingUp size={12} />
+                                        Akumulatif
+                                    </span>
+                                </div>
+                                <div className="p-3 rounded-xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 shadow-sm">
+                                    <Wallet size={22} />
+                                </div>
+                            </div>
+                        </div>
 
-                        <SummaryCard
-                            title="Total Penjualan"
-                            rawValue={50}
-                            valueSuffix=" Pesanan"
-                            desc="Jumlah keseluruhan transaksi pesanan berhasil"
-                            trendText="+8.2% dibanding bulan lalu"
-                            trendType="positive"
-                            icon={ShoppingCart}
-                            theme="teal"
-                            onClick={() => handleCardClick('sales')}
-                        />
+                        {/* Card 2: Total Penjualan */}
+                        <div
+                            onClick={() => setActiveModal("sales")}
+                            className="group bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition-all duration-300 cursor-pointer relative overflow-hidden"
+                        >
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full transition-all group-hover:bg-blue-500/10" />
+                            <div className="flex justify-between items-start">
+                                <div className="space-y-3">
+                                    <span className="text-sm font-semibold text-slate-500">Total Penjualan</span>
+                                    <h3 className="text-2xl font-bold text-slate-800 tracking-tight group-hover:text-blue-700 transition-colors">
+                                        {totalSalesQuantity} Kg / Unit
+                                    </h3>
+                                    <span className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+                                        <Activity size={12} />
+                                        Kuantitas Sukses
+                                    </span>
+                                </div>
+                                <div className="p-3 rounded-xl bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 shadow-sm">
+                                    <ShoppingCart size={22} />
+                                </div>
+                            </div>
+                        </div>
 
-                        <SummaryCard
-                            title="Total Produk"
-                            rawValue={120}
-                            valueSuffix=" Produk"
-                            desc="Jumlah katalog komoditas aktif di pasar"
-                            trendText="15 produk membutuhkan stok tambahan"
-                            trendType="negative"
-                            icon={Leaf}
-                            theme="earth"
-                            onClick={() => handleCardClick('products')}
-                        />
+                        {/* Card 3: Total Produk */}
+                        <div
+                            onClick={() => setActiveModal("products")}
+                            className="group bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:border-green-200 hover:shadow-md transition-all duration-300 cursor-pointer relative overflow-hidden"
+                        >
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-green-500/5 rounded-bl-full transition-all group-hover:bg-green-500/10" />
+                            <div className="flex justify-between items-start">
+                                <div className="space-y-3">
+                                    <span className="text-sm font-semibold text-slate-500">Total Produk</span>
+                                    <h3 className="text-2xl font-bold text-slate-800 tracking-tight group-hover:text-green-700 transition-colors">
+                                        {totalProductsCount} Katalog
+                                    </h3>
+                                    <span className="inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                                        <Layers size={12} />
+                                        Aktif Terdaftar
+                                    </span>
+                                </div>
+                                <div className="p-3 rounded-xl bg-green-50 text-green-600 group-hover:bg-green-600 group-hover:text-white transition-all duration-300 shadow-sm">
+                                    <Package size={22} />
+                                </div>
+                            </div>
+                        </div>
 
-                        <SummaryCard
-                            title="Total Investasi Diterima"
-                            rawValue={8000000}
-                            valuePrefix="Rp"
-                            desc="Dana terkumpul dari investor mitra pertanian"
-                            trendText="65% target investasi tercapai"
-                            trendType="positive"
-                            icon={HandCoins}
-                            theme="gold"
-                            onClick={() => handleCardClick('investment')}
-                        />
+                        {/* Card 4: Total Modal */}
+                        <div
+                            onClick={() => setActiveModal("funding")}
+                            className="group bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:border-amber-200 hover:shadow-md transition-all duration-300 cursor-pointer relative overflow-hidden"
+                        >
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-bl-full transition-all group-hover:bg-amber-500/10" />
+                            <div className="flex justify-between items-start">
+                                <div className="space-y-3">
+                                    <span className="text-sm font-semibold text-slate-500">Total Modal Diterima</span>
+                                    <h3 className="text-2xl font-bold text-slate-800 tracking-tight group-hover:text-amber-700 transition-colors">
+                                        {formatIDR(totalFundingReceived)}
+                                    </h3>
+                                    <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
+                                        <ArrowUpRight size={12} />
+                                        Proyek Investasi
+                                    </span>
+                                </div>
+                                <div className="p-3 rounded-xl bg-amber-50 text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-all duration-300 shadow-sm">
+                                    <Coins size={22} />
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
-                    {/* Modal Detail Interaktif */}
-                    <DetailModal
-                        isOpen={isModalOpen}
-                        onClose={() => setIsModalOpen(false)}
-                        data={selectedCard}
-                    />
+                    {/* ====================================================
+            CHART SECTION & AGROBUSINESS HIGHLIGHT
+            ==================================================== */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                        {/* Main Revenue Chart */}
+                        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 lg:col-span-2 flex flex-col justify-between">
+                            <div>
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                                    <div>
+                                        <h3 className="text-lg font-bold text-slate-800">Pendapatan Bulanan</h3>
+                                        <p className="text-xs text-slate-400 mt-1">Struktur penerimaan komparatif berjalan (Januari - Desember)</p>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+                                            <Calendar size={14} className="text-slate-400" />
+                                            Tahun Berjalan
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Area Chart Container */}
+                                <div className="h-80 w-full relative z-10">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <AreaChart
+                                            data={safeRevenueData}
+                                            margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+                                        >
+                                            <defs>
+                                                <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.25} />
+                                                    <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
+                                                </linearGradient>
+                                            </defs>
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                            <XAxis
+                                                dataKey="month"
+                                                stroke="#94a3b8"
+                                                fontSize={11}
+                                                tickLine={false}
+                                                axisLine={false}
+                                            />
+                                            <YAxis
+                                                stroke="#94a3b8"
+                                                fontSize={11}
+                                                tickLine={false}
+                                                axisLine={false}
+                                                tickFormatter={(value) => `Rp${value / 1000000}M`}
+                                            />
+                                            <Tooltip content={<CustomTooltip />} />
+                                            <Area
+                                                type="monotone"
+                                                dataKey="revenue"
+                                                stroke="#10b981"
+                                                strokeWidth={3}
+                                                fillOpacity={1}
+                                                fill="url(#colorRevenue)"
+                                                dot={{ r: 4, strokeWidth: 2, stroke: "#10b981", fill: "#ffffff" }}
+                                                activeDot={{ r: 6, strokeWidth: 0, fill: "#047857" }}
+                                            />
+                                        </AreaChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Agro Quick Insights Widget */}
+                        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-between">
+                            <div className="space-y-6">
+                                <div>
+                                    <h3 className="text-lg font-bold text-slate-800">Ringkasan Agribisnis</h3>
+                                    <p className="text-xs text-slate-400 mt-1">Data operasional instan bisnis Anda</p>
+                                </div>
+
+                                <div className="space-y-4">
+
+                                    {/* Best Selling Row */}
+                                    <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-4">
+                                        <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
+                                            <Leaf size={20} />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <span className="text-xs text-slate-400 block font-medium">Produk Terlaris</span>
+                                            <span className="text-sm font-semibold text-slate-700 truncate block">
+                                                {bestSelling?.product?.name || "Memuat..."}
+                                            </span>
+                                        </div>
+                                        <span className="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-1 rounded">
+                                            {bestSelling?.quantity} Kg
+                                        </span>
+                                    </div>
+
+                                    {/* Investment Milestone */}
+                                    <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-4">
+                                        <div className="p-3 bg-amber-50 text-amber-600 rounded-xl">
+                                            <Coins size={20} />
+                                        </div>
+                                        <div className="flex-1">
+                                            <span className="text-xs text-slate-400 block font-medium">Modal Terkumpul</span>
+                                            <span className="text-sm font-semibold text-slate-700 block">
+                                                {formatIDR(totalFundingReceived)}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Categories Count */}
+                                    <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-4">
+                                        <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
+                                            <Layers size={20} />
+                                        </div>
+                                        <div className="flex-1">
+                                            <span className="text-xs text-slate-400 block font-medium">Keberagaman Kategori</span>
+                                            <span className="text-sm font-semibold text-slate-700 block">
+                                                {categoriesDistribution.length} Kategori Utama
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div className="pt-4 border-t border-slate-100 mt-6 flex items-center justify-between text-xs text-slate-400">
+                                <span className="inline-flex items-center gap-1">
+                                    <Info size={14} className="text-slate-300" /> Standar Akuntansi Agraria
+                                </span>
+                                <span>Aktif</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {/* ====================================================
+            RECENT ORDERS SECTION
+            ==================================================== */}
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div className="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <h3 className="text-lg font-bold text-slate-800">Daftar Transaksi Terbaru</h3>
+                                <p className="text-xs text-slate-400 mt-1">Lacak langsung log pesanan dan distribusi komoditas</p>
+                            </div>
+                            <div className="text-xs text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100 flex items-center gap-1.5 self-start sm:self-auto">
+                                <Activity size={14} className="text-slate-400" />
+                                Sistem Log Terautomasi
+                            </div>
+                        </div>
+
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse">
+                                <thead>
+                                    <tr className="bg-slate-50/75 border-b border-slate-100 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                                        <th className="py-4 px-6">Pelanggan</th>
+                                        <th className="py-4 px-6">Komoditas Produk</th>
+                                        <th className="py-4 px-6 text-center">Jumlah</th>
+                                        <th className="py-4 px-6 text-right">Total Transaksi</th>
+                                        <th className="py-4 px-6 text-center">Status</th>
+                                        <th className="py-4 px-6">Tanggal</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100 text-sm">
+                                    {safeOrders.slice(0, 7).map((order, idx) => {
+                                        // Relasikan productId dengan products.id untuk menampilkan nama produk
+                                        const productInfo = safeProducts.find(
+                                            (p) => String(p.id) === String(order.productId)
+                                        );
+                                        return (
+                                            <tr key={order.id || idx} className="hover:bg-slate-50/50 transition-colors">
+                                                <td className="py-4 px-6 font-medium text-slate-800">
+                                                    {order.customerName || "Tanpa Nama"}
+                                                </td>
+                                                <td className="py-4 px-6">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                                                        <span className="text-slate-700 font-medium">
+                                                            {productInfo ? productInfo.name : `Produk #${order.productId}`}
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td className="py-4 px-6 text-center font-semibold text-slate-600">
+                                                    {order.quantity} Kg
+                                                </td>
+                                                <td className="py-4 px-6 text-right font-bold text-slate-800">
+                                                    {formatIDR(order.total)}
+                                                </td>
+                                                <td className="py-4 px-6 text-center">
+                                                    {getStatusBadge(order.status)}
+                                                </td>
+                                                <td className="py-4 px-6 text-slate-400 text-xs">
+                                                    {order.date || "-"}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
                 </div>
+
+                {/* ====================================================
+          MODAL INTERAKTIF (POPUP DETAIL)
+          ==================================================== */}
+                {activeModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300">
+                        <div className="relative bg-white w-full max-w-xl rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transform scale-100 transition-all">
+
+                            {/* Modal Header */}
+                            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                                <div className="flex items-center gap-3">
+                                    <div className={`p-2.5 rounded-xl ${activeModal === 'revenue' ? 'bg-emerald-50 text-emerald-600' :
+                                        activeModal === 'sales' ? 'bg-blue-50 text-blue-600' :
+                                            activeModal === 'products' ? 'bg-green-50 text-green-600' :
+                                                'bg-amber-50 text-amber-600'
+                                        }`}>
+                                        {activeModal === 'revenue' && <Wallet size={20} />}
+                                        {activeModal === 'sales' && <ShoppingCart size={20} />}
+                                        {activeModal === 'products' && <Package size={20} />}
+                                        {activeModal === 'funding' && <Coins size={20} />}
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-bold text-slate-800">
+                                            {activeModal === 'revenue' && "Detail Analisis Pendapatan"}
+                                            {activeModal === 'sales' && "Detail Kinerja Penjualan"}
+                                            {activeModal === 'products' && "Detail Portofolio Produk"}
+                                            {activeModal === 'funding' && "Detail Pendanaan & Investasi"}
+                                        </h3>
+                                        <p className="text-xs text-slate-400">Pembaruan data agribisnis aktual</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setActiveModal(null)}
+                                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-150 transition-colors"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+
+                            {/* Modal Body */}
+                            <div className="p-6 max-h-[70vh] overflow-y-auto space-y-6">
+
+                                {/* REVENUE MODAL CONTENT */}
+                                {activeModal === "revenue" && (
+                                    <div className="space-y-4">
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-100">
+                                                <span className="text-xs font-semibold text-slate-500 block mb-1">Rata-rata Bulanan</span>
+                                                <span className="text-lg font-extrabold text-emerald-800">
+                                                    {formatIDR(totalRevenue / (safeRevenueData.length || 1))}
+                                                </span>
+                                            </div>
+                                            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                                <span className="text-xs font-semibold text-slate-500 block mb-1">Jumlah Bulan Aktif</span>
+                                                <span className="text-lg font-extrabold text-slate-800">{safeRevenueData.length} Bulan</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Rincian Penerimaan Kas</h4>
+                                            <div className="divide-y divide-slate-100 border border-slate-100 rounded-xl overflow-hidden">
+                                                {safeRevenueData.map((item, idx) => (
+                                                    <div key={idx} className="flex justify-between items-center px-4 py-3 bg-white text-sm">
+                                                        <span className="font-semibold text-slate-600">{item.month}</span>
+                                                        <span className="font-bold text-emerald-700">{formatIDR(item.revenue)}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* SALES MODAL CONTENT */}
+                                {activeModal === "sales" && (
+                                    <div className="space-y-4">
+                                        <div className="p-4 bg-blue-50/60 rounded-2xl border border-blue-100 space-y-1">
+                                            <span className="text-xs font-semibold text-slate-500 block">Produk Terlaris Saat Ini</span>
+                                            <span className="text-base font-extrabold text-blue-900 block">{bestSelling.product.name}</span>
+                                            <span className="text-xs font-medium text-blue-700">Terdistribusi {bestSelling.quantity} Kg</span>
+                                        </div>
+                                        <div>
+                                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Statistik Status Pemesanan</h4>
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-100 flex items-center justify-between">
+                                                    <span className="text-xs text-slate-600 font-medium">Selesai/Terkirim</span>
+                                                    <span className="text-sm font-bold text-emerald-700">{completedOrders.length}</span>
+                                                </div>
+                                                <div className="p-3 bg-amber-50 rounded-xl border border-amber-100 flex items-center justify-between">
+                                                    <span className="text-xs text-slate-600 font-medium">Pending/Proses</span>
+                                                    <span className="text-sm font-bold text-amber-700">
+                                                        {safeOrders.length - completedOrders.length}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* PRODUCTS MODAL CONTENT */}
+                                {activeModal === "products" && (
+                                    <div className="space-y-4">
+                                        <div>
+                                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Proporsi Kategori Hortikultura</h4>
+                                            <div className="space-y-2.5">
+                                                {categoriesDistribution.map((cat, idx) => (
+                                                    <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 text-sm">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                                                            <span className="font-semibold text-slate-600">{cat.name}</span>
+                                                        </div>
+                                                        <span className="font-bold text-slate-800">{cat.count} Produk</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* FUNDING MODAL CONTENT */}
+                                {activeModal === "funding" && (
+                                    <div className="space-y-4">
+                                        <div className="p-4 bg-amber-50/60 rounded-2xl border border-amber-100 text-center">
+                                            <span className="text-xs font-semibold text-slate-500 block mb-1">Total Dana Pendanaan Usaha</span>
+                                            <span className="text-2xl font-extrabold text-amber-800 block">{formatIDR(totalFundingReceived)}</span>
+                                        </div>
+                                        <div>
+                                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Status Kampanye Pendanaan</h4>
+                                            <div className="space-y-3.5">
+                                                {safeFunding.map((fund, idx) => {
+                                                    const target = Number(fund.fundTarget || fund.target) || 1;
+                                                    const progress = Math.min(100, Math.round(((Number(fund.fundCollected) || 0) / target) * 100));
+                                                    return (
+                                                        <div key={fund.id || idx} className="p-4 bg-slate-50 rounded-xl border border-slate-100 text-sm space-y-2.5">
+                                                            <div className="flex justify-between items-center">
+                                                                <span className="font-bold text-slate-700">{fund.title || "Proyek Tani"}</span>
+                                                                <span className="text-xs font-bold text-emerald-600">{progress}% Terpenuhi</span>
+                                                            </div>
+                                                            <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                                                                <div className="bg-emerald-600 h-full transition-all duration-500" style={{ width: `${progress}%` }} />
+                                                            </div>
+                                                            <div className="flex justify-between items-center text-xs text-slate-400">
+                                                                <span>Terkumpul: {formatIDR(fund.fundCollected)}</span>
+                                                                <span>Target: {formatIDR(target)}</span>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                            </div>
+
+                            {/* Modal Footer */}
+                            <div className="p-4 border-t border-slate-150 bg-slate-50 text-right">
+                                <button
+                                    onClick={() => setActiveModal(null)}
+                                    className="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold shadow-md transition-all duration-200"
+                                >
+                                    Tutup Ringkasan
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                )}
+
             </div>
-            <Anal />
-            <Racent />
         </>
     );
 }

@@ -14,19 +14,27 @@ import ProductsVendor from "./pages/vendor/products/productsvendor.jsx"
 import OrderVendor from "./pages/vendor/orders/ordesvendor.jsx"
 import InventoryVendor from "./pages/vendor/inventory/inventoryvendor.jsx"
 import FinanceVendor from "./pages/vendor/finance/FinanceVendor.jsx"
+import AnalVendor from "./pages/vendor/anal/analvendor.jsx"
+import InvestmentVendor from "./pages/vendor/investment/investmentvendor.jsx"
+import ReportVendor from "./pages/vendor/report/reportvendor.jsx"
 
 import { Routes, Route } from "react-router-dom"
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navbar1 />} />
+      <Route path="/" element={<DashboardVendor />} />
       {/* Vendor */}
       <Route path="/Dashboardvendor" element={<DashboardVendor />} />
       <Route path="/ProdukVendor" element={<ProductsVendor />} />
       <Route path="/PesananVendor" element={<OrderVendor />} />
       <Route path="/InventarisVendor" element={<InventoryVendor />} />
       <Route path="/KeuanganVendor" element={<FinanceVendor />} />
+      <Route path="/AnalisisVendor" element={<AnalVendor />} />
+      <Route path="/InvestasiVendor" element={<InvestmentVendor />} />
+      <Route path="/LaporanVendor" element={<ReportVendor />} />
+
+
       {/* Marketplace */}
       <Route path="/marketplace" element={<Marketplace />} />
       <Route path="/petani" element={<Petani />} />
