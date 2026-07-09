@@ -1,0 +1,32 @@
+:root {
+  /* Font Family */
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+
+  /* Palette Warna Agro */
+  --color-agro-50: #f0fdf4;
+  --color-agro-100: #dcfce7;
+  --color-agro-200: #bbf7d0;
+  --color-agro-300: #86efac;
+  --color-agro-400: #4ade80;
+  --color-agro-500: #22c55e;
+  --color-agro-600: #16a34a;
+  --color-agro-700: #15803d;
+  --color-agro-800: #166534;
+  --color-agro-900: #14532d;
+  --color-agro-950: #052e16;
+
+  /* Palette Warna Earth */
+  --color-earth-50: #fdf8f6;
+  --color-earth-100: #f2e8e5;
+  --color-earth-200: #e4d0ca;
+  --color-earth-300: #d2b2a6;
+  --color-earth-400: #bd8e7d;
+  --color-earth-500: #a76d5a;
+  --color-earth-600: #945846;
+  --color-earth-700: #7c4739;
+  --color-earth-800: #673c31;
+  --color-earth-900: #56342b;
+
+  /* Custom Shadow */
+  --shadow-soft: 0 10px 30px -10px rgba(22, 101, 52, 0.08);
+}
