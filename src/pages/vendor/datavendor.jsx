@@ -32,7 +32,7 @@ export const products = [
         stock: 200,
         unit: "Kg",
         description: "Kentang granola super berkualitas prima dengan kulit mulus dan tekstur padat lembut, ideal untuk aneka olahan kuliner.",
-        image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/1200x/2f/5c/8c/2f5c8c9b45516704212fa520e7ade70a.jpg",
         status: "Aktif"
     },
     {
@@ -43,7 +43,7 @@ export const products = [
         stock: 350,
         unit: "Kg",
         description: "Bawang merah asli Brebes dengan kadar air rendah, beraroma tajam harum menyengat dan memberikan cita rasa gurih alami.",
-        image: "https://images.unsplash.com/photo-1508747703725-719ae257c26a?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/1200x/12/cd/9b/12cd9bf6397eef445fdccb6dc33494e6.jpg",
         status: "Aktif"
     },
     {
@@ -54,7 +54,7 @@ export const products = [
         stock: 15,
         unit: "Kg",
         description: "Jagung hibrida manis kupas sebagian dengan bulir kuning keemasan yang padat, manis alami, dan bertekstur renyah.",
-        image: "https://images.unsplash.com/photo-1551754625-70c90487a8dd?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/1200x/ed/07/7b/ed077b9da579e3e9d43b64522be6349b.jpg",
         status: "Aktif"
     },
     {
@@ -65,7 +65,7 @@ export const products = [
         stock: 0,
         unit: "Kg",
         description: "Selada hijau hidroponik berdaun renyah dan bersih dari residu pestisida, dikemas segar bersama akar pengikatnya.",
-        image: "https://images.unsplash.com/photo-1622205313162-be1d5712a43f?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/736x/4a/7c/1d/4a7c1d57eb8aec00ff9a6e7e8578a33a.jpg",
         status: "Aktif"
     },
     {
@@ -76,7 +76,7 @@ export const products = [
         stock: 120,
         unit: "Kg",
         description: "Timun Kyuri renyah dengan bentuk silindris seragam, berkadar air tinggi dan ideal untuk salad atau hidangan segar.",
-        image: "https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/736x/77/ba/78/77ba78d239e6451d784a8943b782b906.jpg",
         status: "Aktif"
     },
     {
@@ -87,7 +87,7 @@ export const products = [
         stock: 90,
         unit: "Kg",
         description: "Wortel manis organik Berastagi berwarna oranye pekat kaya beta-karoten, bersih dan siap konsumsi.",
-        image: "https://images.unsplash.com/photo-1598170845058-32b996a7ad11?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/1200x/3e/31/db/3e31db74402254f39c3238f3342819f2.jpg",
         status: "Aktif"
     },
     {
@@ -98,7 +98,7 @@ export const products = [
         stock: 8,
         unit: "Ikat",
         description: "Bayam hijau cabut segar dipanen menjelang fajar untuk mempertahankan vitamin, zat besi, dan kesegarannya.",
-        image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/736x/ea/bb/39/eabb39d6adfbcd31b376f8b14ca626ac.jpg",
         status: "Aktif"
     },
     {
@@ -109,7 +109,7 @@ export const products = [
         stock: 60,
         unit: "Kg",
         description: "Kuntum brokoli hijau pekat padat berongga minim, diproduksi ramah lingkungan melalui sistem tanam aquaponik.",
-        image: "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/736x/e0/77/dd/e077dd17e4830620451617414d01082b.jpg",
         status: "Aktif"
     },
     {
@@ -120,7 +120,7 @@ export const products = [
         stock: 40,
         unit: "Kg",
         description: "Buah stroberi manis-asam beraroma harum semerbak, dipetik langsung dari dataran tinggi Ciwidey.",
-        image: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/1200x/62/57/c2/6257c298033ed1ee2c66bd652db459dc.jpg",
         status: "Aktif"
     },
     {
@@ -131,7 +131,7 @@ export const products = [
         stock: 150,
         unit: "Sisir",
         description: "Pisang kepok manis matang pohon alami tanpa pemaksaan karbit, kaya kalium untuk asupan energi sehat harian.",
-        image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/736x/ee/7c/80/ee7c8067629dbe3aeb633428106dab5e.jpg",
         status: "Aktif"
     },
     {
@@ -142,7 +142,7 @@ export const products = [
         stock: 0,
         unit: "Kg",
         description: "Jeruk manis siam madu lokal dengan rasa manis menyegarkan, berkulit mulus dan kaya kandungan vitamin C.",
-        image: "https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/736x/1f/14/30/1f1430faf44415229395ddc7a939f3b7.jpg",
         status: "Nonaktif"
     },
     {
@@ -153,7 +153,7 @@ export const products = [
         stock: 80,
         unit: "Kg",
         description: "Biji kopi Arabika single origin lereng Gunung Gede Pangrango, diproses basah (wet process) dengan aroma eksotis.",
-        image: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/736x/ce/52/6a/ce526ae5968eecc2511b02d94460e392.jpg",
         status: "Aktif"
     },
     {
@@ -164,7 +164,7 @@ export const products = [
         stock: 100,
         unit: "Pcs",
         description: "Teh herbal kering olahan bunga krisan dan pucuk melati organik berkhasiat menenangkan saraf pikiran.",
-        image: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&q=80&w=400",
+        image: "https://i.pinimg.com/1200x/a4/dd/30/a4dd30be1bbf8ddf6ff76479d958bf16.jpg",
         status: "Aktif"
     }
 ];
@@ -920,14 +920,14 @@ export const funding = [
 // ============================================================================
 // 7. PROFILE DATA
 // ============================================================================
-export const profile = {
-    businessName: "Agro Tani Organik Nusantara",
-    description: "Produsen dan distributor hortikultura organik terkemuka yang bermitra erat dengan ratusan kelompok tani lokal guna menyalurkan komoditas segar berkualitas tinggi bebas pestisida kimia.",
-    address: "Jl. Pertanian Modern No. 88, Lembang, Bandung Barat, Jawa Barat",
-    phone: "081234567890",
-    email: "info@agrotaninusantara.co.id",
-    image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=600"
-};
+// export const profile = {
+//     businessName: "Agro Tani Organik Nusantara",
+//     description: "Produsen dan distributor hortikultura organik terkemuka yang bermitra erat dengan ratusan kelompok tani lokal guna menyalurkan komoditas segar berkualitas tinggi bebas pestisida kimia.",
+//     address: "Jl. Pertanian Modern No. 88, Lembang, Bandung Barat, Jawa Barat",
+//     phone: "081234567890",
+//     email: "info@agrotaninusantara.co.id",
+//     image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=600"
+// };
 
 // ============================================================================
 // DEFAULT EXPORT (COMPREHENSIVE MAP)
