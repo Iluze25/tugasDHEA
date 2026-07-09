@@ -18,12 +18,18 @@ import AnalVendor from "./pages/vendor/anal/analvendor.jsx"
 import InvestmentVendor from "./pages/vendor/investment/investmentvendor.jsx"
 import ReportVendor from "./pages/vendor/report/reportvendor.jsx"
 
+
+// Investor
+import Investor from "./pages/investor/investor.jsx"
+import Navbar2 from "./components/investor/navbar.jsx"
 import { Routes, Route } from "react-router-dom"
+
+import Presentasi from "./pages/persentasi.jsx"
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<DashboardVendor />} />
+      <Route path="/" element={<Investor />} />
       {/* Vendor */}
       <Route path="/Dashboardvendor" element={<DashboardVendor />} />
       <Route path="/ProdukVendor" element={<ProductsVendor />} />
