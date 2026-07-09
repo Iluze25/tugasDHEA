@@ -29,7 +29,7 @@ import Presentasi from "./pages/persentasi.jsx"
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Investor />} />
+      <Route path="/" element={<Presentasi />} />
       {/* Vendor */}
       <Route path="/Dashboardvendor" element={<DashboardVendor />} />
       <Route path="/ProdukVendor" element={<ProductsVendor />} />
