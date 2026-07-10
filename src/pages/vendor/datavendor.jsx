@@ -920,14 +920,14 @@ export const funding = [
 // ============================================================================
 // 7. PROFILE DATA
 // ============================================================================
-// export const profile = {
-//     businessName: "Agro Tani Organik Nusantara",
-//     description: "Produsen dan distributor hortikultura organik terkemuka yang bermitra erat dengan ratusan kelompok tani lokal guna menyalurkan komoditas segar berkualitas tinggi bebas pestisida kimia.",
-//     address: "Jl. Pertanian Modern No. 88, Lembang, Bandung Barat, Jawa Barat",
-//     phone: "081234567890",
-//     email: "info@agrotaninusantara.co.id",
-//     image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=600"
-// };
+export const profile = {
+    businessName: "Agro Tani Organik Nusantara",
+    description: "Produsen dan distributor hortikultura organik terkemuka yang bermitra erat dengan ratusan kelompok tani lokal guna menyalurkan komoditas segar berkualitas tinggi bebas pestisida kimia.",
+    address: "Jl. Pertanian Modern No. 88, Lembang, Bandung Barat, Jawa Barat",
+    phone: "083176470171",
+    email: "iluzeear@gmail.com",
+    image: "https://scontent.fcgk22-2.fna.fbcdn.net/v/t39.30808-1/488921436_1453267752705007_5864091378705276613_n.jpg?stp=c0.0.742.742a_dst-jpg_tt6&cstp=mx742x742&ctp=s200x200&_nc_cat=110&ccb=1-7&_nc_sid=1d2534&_nc_ohc=xkMjZJO6p1cQ7kNvwE8ZWH3&_nc_oc=AdpbxToEQR8hQKueN6Aaub2Aa4tfM3FyeP2GcnjpG5QYsLHaQmuu8DBLgmKUhA7jn7w&_nc_zt=24&_nc_ht=scontent.fcgk22-2.fna&_nc_gid=AcQBYoffRjdBJG0hlwV6gg&_nc_ss=7c2a8&oh=00_AQD0NgaZNsebPp5egkqNtOObw0etnUrmkgNek1pMVNcFUQ&oe=6A54400E"
+};
 
 // ============================================================================
 // DEFAULT EXPORT (COMPREHENSIVE MAP)

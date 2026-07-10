@@ -326,7 +326,7 @@ export default function AgriTechLandingPage() {
                             </div>
                         </div>
 
-                        <button onClick={() => navigate("/logindvendor")} className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                        <button onClick={() => navigate("/loginvendor")} className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
                             Masuk Platform <ChevronRight className="w-4 h-4" />
                         </button>
                     </motion.div>
